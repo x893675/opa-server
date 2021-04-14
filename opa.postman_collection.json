@@ -1,0 +1,385 @@
+{
+    "info": {
+        "_postman_id": "90e3ee16-1e8d-4d96-9375-368621322f27",
+        "name": "opa",
+        "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+    },
+    "item": [
+        {
+            "name": "CreateData",
+            "request": {
+                "method": "PUT",
+                "header": [],
+                "body": {
+                    "mode": "raw",
+                    "raw": "{\n    \"roles\": {\n        \"alice\": [\n            \"admin\"\n        ],\n        \"bob\": [\n            \"regular\"\n        ]\n    },\n    \"permissions\": {\n        \"regular\": [\n            {\n                \"verbs\": [\n                    \"GET\",\n                    \"UPDATE\"\n                ],\n                \"apiGroups\": [\n                    \"*\"\n                ],\n                \"resources\": [\n                    \"namespaces\",\n                    \"clusters\"\n                ],\n                \"resourceNames\": [],\n                \"nonResourceURLs\": [\n                    \"/metrics\"\n                ]\n            },\n            {\n                \"verbs\": \"POST\",\n                \"apiGroups\": [\n                    \"core.io\"\n                ],\n                \"resources\": [\n                    \"*\"\n                ],\n                \"resourceNames\": [],\n                \"nonResourceURLs\": []\n            }\n        ]\n    }\n}",
+                    "options": {
+                        "raw": {
+                            "language": "json"
+                        }
+                    }
+                },
+                "url": {
+                    "raw": "192.168.234.130:8181/v1/data/:data",
+                    "host": [
+                        "192",
+                        "168",
+                        "234",
+                        "130"
+                    ],
+                    "port": "8181",
+                    "path": [
+                        "v1",
+                        "data",
+                        ":data"
+                    ],
+                    "variable": [
+                        {
+                            "key": "data",
+                            "value": "api/rbac"
+                        }
+                    ]
+                }
+            },
+            "response": []
+        },
+        {
+            "name": "PatchData",
+            "protocolProfileBehavior": {
+                "disabledSystemHeaders": {
+                    "content-type": true
+                }
+            },
+            "request": {
+                "method": "PATCH",
+                "header": [
+                    {
+                        "key": "Content-Type",
+                        "value": "application/json-patch+json",
+                        "type": "text"
+                    }
+                ],
+                "body": {
+                    "mode": "raw",
+                    "raw": "[\n    {\n        \"op\": \"add\",\n        \"path\": \"/viewer\",\n        \"value\": {\n            \"apiGroups\": [\n                \"*\"\n            ],\n            \"nonResourceURLs\": [\n                \"*\"\n            ],\n            \"resourceNames\": [],\n            \"resources\": [\n                \"*\"\n            ],\n            \"verbs\": [\n                \"*\"\n            ]\n        }\n    }\n]",
+                    "options": {
+                        "raw": {
+                            "language": "json"
+                        }
+                    }
+                },
+                "url": {
+                    "raw": "192.168.234.130:8181/v1/data/:data",
+                    "host": [
+                        "192",
+                        "168",
+                        "234",
+                        "130"
+                    ],
+                    "port": "8181",
+                    "path": [
+                        "v1",
+                        "data",
+                        ":data"
+                    ],
+                    "variable": [
+                        {
+                            "key": "data",
+                            "value": "api/rbac/permissions"
+                        }
+                    ]
+                }
+            },
+            "response": []
+        },
+        {
+            "name": "ListData",
+            "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                    "raw": "192.168.234.130:8181/v1/data/:data?pretty=true",
+                    "host": [
+                        "192",
+                        "168",
+                        "234",
+                        "130"
+                    ],
+                    "port": "8181",
+                    "path": [
+                        "v1",
+                        "data",
+                        ":data"
+                    ],
+                    "query": [
+                        {
+                            "key": "pretty",
+                            "value": "true"
+                        }
+                    ],
+                    "variable": [
+                        {
+                            "key": "data",
+                            "value": "api/rbac"
+                        }
+                    ]
+                }
+            },
+            "response": []
+        },
+        {
+            "name": "DeleteData",
+            "request": {
+                "method": "DELETE",
+                "header": [],
+                "url": {
+                    "raw": "192.168.234.130:8181/v1/data/:data",
+                    "host": [
+                        "192",
+                        "168",
+                        "234",
+                        "130"
+                    ],
+                    "port": "8181",
+                    "path": [
+                        "v1",
+                        "data",
+                        ":data"
+                    ],
+                    "variable": [
+                        {
+                            "key": "data",
+                            "value": "app"
+                        }
+                    ]
+                }
+            },
+            "response": []
+        },
+        {
+            "name": "ListPolicy",
+            "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                    "raw": "192.168.234.130:8181/v1/policies?pretty=true",
+                    "host": [
+                        "192",
+                        "168",
+                        "234",
+                        "130"
+                    ],
+                    "port": "8181",
+                    "path": [
+                        "v1",
+                        "policies"
+                    ],
+                    "query": [
+                        {
+                            "key": "pretty",
+                            "value": "true"
+                        }
+                    ]
+                }
+            },
+            "response": []
+        },
+        {
+            "name": "CreatePolicy",
+            "request": {
+                "method": "PUT",
+                "header": [],
+                "body": {
+                    "mode": "raw",
+                    "raw": "package api.rbac\n\nimport data.api.rbac.permissions\nimport data.api.rbac.roles # import roles list from data.api.rbac\nimport input\n\n# By default, deny requests.\ndefault allow = false\n\n# More than one OR Condition for a variable `allow`\n\n# Allow admins to do anything.\nallow {\n\tuser_is_admin\n}\n\n# Allow the action if the user is granted permission to perform the action.\nallow {\n\tinput.resourceRequest == true\n\n\t# check for blacklisted grants for user\n\t# not user_grant_is_blacklisted\n\n\t# Find grants for the user.\n\tsome grant\n\tuser_is_granted[grant]\n\n\t# Check if the grant permits the action. And Condition\n\tis_verb_match(grant.verbs)\n\tis_apiGroup_match(grant.apiGroups)\n\tis_resource_match(grant.resources)\n\tis_resourceName_match(grant.resourceNames)\n}\n\n# non resource request match\nallow {\n\tinput.resourceRequest == false\n\n}\n\n# user_is_admin is true if...\nuser_is_admin {\n\t# for some `i`...\n\tsome i\n\n\t# \"admin\" is the `i`-th element in the user->role mappings for the identified user.\n\troles[input.user][i] == \"admin\"\n}\n\n# user_is_granted is a set of grants for the user identified in the request.\n# The `grant` will be contained if the set `user_is_granted` for every...\nuser_is_granted[grant] {\n\tsome i, j\n\n\t# `role` assigned an element of the user_roles for this user...\n\trole := roles[input.user][i]\n\n\t# `grant` assigned a single grant from the grants list for 'role'...\n\tgrant := permissions[role][j]\n}\n\n# who_are is a set of users who has roles identified in the request.\nwho_are[user] {\n    # for some `user`...\n\tsome user\n\n\t# `roleList` assigned a single user roles list...\n\troleList := roles[user]\n\n    # Check if the roleList matches the input role\n    roleList[_] == input.role\n}\n\n# who_all_are is a set of users along with roles list who has roles identified in the request.\nwho_all_are[{ user: roleList }] {\n    # for some `user` and `role`...\n\tsome user, role\n\n\t# `roleList` assigned a single user roles list...\n\troleList := roles[user]\n\n    # Check if the roleList matches the input role list\n    roleList[_] == input.roles[role]\n}\n\n\n# roles_can is a set of roles who has grants identified in the request.\n# roles_can[role] {\n#     # for some `role` and `permission`...\n# \tsome role, permission\n\n# \t# `roleList` assigned a single permission role list...\n# \troleList := permissions[role]\n\n#     # `grant` assigned a single grant from all grants list...\n#     grant := roleList[permission]\n\n#     # Check if the grant permits the action.\n# \tinput.grant.action == grant.action\n# \tinput.grant.type == grant.type\n# }\n\n# users_can is a set of roles who has grants identified in the request.\n# users_can[user] {\n#     # for some `role` and `permission`...\n# \tsome role, permission\n\n# \t# `roleList` assigned a single permission role list...\n# \troleList := permissions[role]\n\n#     # `grant` assigned a single grant from all grants list...\n#     grant := roleList[permission]\n\n#     # Check if the grant permits the action.\n# \tinput.grant.action == grant.action\n# \tinput.grant.type == grant.type\n\n# \t # for some `user`\n# \tsome user\n\n# \t# `askedRoleList` assigned a single user roles list...\n# \taskedRoleList := roles[user]\n\n#     # Check if the askedRoleList matches the selected role from upper iteration\n#     askedRoleList[_] == role\n\n# }\n\nis_verb_match(verb) {\n\tsome i\n\tverb[i] == \"*\"\n}\n\nis_verb_match(verb) {\n\tsome i\n\tverb[i] == input.verb\n}\n\nis_apiGroup_match(apiGroups) {\n\tsome i\n\tapiGroups[i] == \"*\"\n}\n\nis_apiGroup_match(apiGroups) {\n\tsome i\n\tapiGroups[i] == input.apiGroup\n}\n\nis_resource_match(resources) {\n\tsome i\n\tresources[i] == \"*\"\n}\n\nis_resource_match(resources) {\n\tsome i\n\tresources[i] == input.resource\n}\n\nis_resourceName_match(resourceNames) {\n\tcount(resourceNames) == 0\n}\n\nis_resourceName_match(resourceNames) {\n\tsome i\n\tresourceNames[i] == input.resourceNames\n}\n\nis_nonResourceURL_match(nonResourceURLs) {\n\tsome i\n\tnonResourceURLs[i] == \"*\"\n}\n\nis_nonResourceURL_match(nonResourceURLs) {\n\tsome i\n\tnonResourceURLs[i] == input.Path\n}\n\n# {\n#     \"user\": \"bob\",\n#     \"resourceRequest\": true,\n#     \"verb\": \"UPDATE\",\n#     \"apiGroup\": \"*\",\n#     \"resource\": \"namespaces\",\n#     \"resourceName\": \"test\"\n# }",
+                    "options": {
+                        "raw": {
+                            "language": "text"
+                        }
+                    }
+                },
+                "url": {
+                    "raw": "192.168.234.130:8181/v1/policies/:policy",
+                    "host": [
+                        "192",
+                        "168",
+                        "234",
+                        "130"
+                    ],
+                    "port": "8181",
+                    "path": [
+                        "v1",
+                        "policies",
+                        ":policy"
+                    ],
+                    "variable": [
+                        {
+                            "key": "policy",
+                            "value": "rbac"
+                        }
+                    ]
+                }
+            },
+            "response": []
+        },
+        {
+            "name": "DeletePolicy",
+            "request": {
+                "method": "DELETE",
+                "header": [],
+                "body": {
+                    "mode": "raw",
+                    "raw": "# Role-based Access Control (RBAC)\n# --------------------------------\n#\n# This example defines an RBAC model for a Pet Store API. The Pet Store API allows\n# users to look at pets, adopt them, update their stats, and so on. The policy\n# controls which users can perform actions on which resources. The policy implements\n# a classic Role-based Access Control model where users are assigned to roles and\n# roles are granted the ability to perform some action(s) on some type of resource.\n#\n# This example shows how to:\n#\n#\t* Define an RBAC model in Rego that interprets role mappings represented in JSON.\n#\t* Iterate/search across JSON data structures (e.g., role mappings)\n#\n# For more information see:\n#\n#\t* Rego comparison to other systems: https://www.openpolicyagent.org/docs/latest/comparison-to-other-systems/\n#\t* Rego Iteration: https://www.openpolicyagent.org/docs/latest/#iteration\n\npackage app.rbac\n\n# By default, deny requests.\ndefault allow = false\n\n# Allow admins to do anything.\nallow {\n\tuser_is_admin\n}\n\n# Allow the action if the user is granted permission to perform the action.\nallow {\n\t# Find grants for the user.\n\tsome grant\n\tuser_is_granted[grant]\n\n\t# Check if the grant permits the action.\n\tinput.action == grant.action\n\tinput.type == grant.type\n}\n\n# user_is_admin is true if...\nuser_is_admin {\n\n\t# for some `i`...\n\tsome i\n\n\t# \"admin\" is the `i`-th element in the user->role mappings for the identified user.\n\tdata.user_roles[input.user][i] == \"admin\"\n}\n\n# user_is_granted is a set of grants for the user identified in the request.\n# The `grant` will be contained if the set `user_is_granted` for every...\nuser_is_granted[grant] {\n\tsome i, j\n\n\t# `role` assigned an element of the user_roles for this user...\n\trole := data.user_roles[input.user][i]\n\n\t# `grant` assigned a single grant from the grants list for 'role'...\n\tgrant := data.role_grants[role][j]\n}",
+                    "options": {
+                        "raw": {
+                            "language": "text"
+                        }
+                    }
+                },
+                "url": {
+                    "raw": "192.168.234.130:8181/v1/policies/:policy",
+                    "host": [
+                        "192",
+                        "168",
+                        "234",
+                        "130"
+                    ],
+                    "port": "8181",
+                    "path": [
+                        "v1",
+                        "policies",
+                        ":policy"
+                    ],
+                    "variable": [
+                        {
+                            "key": "policy",
+                            "value": "rbac"
+                        }
+                    ]
+                }
+            },
+            "response": []
+        },
+        {
+            "name": "GetData",
+            "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                    "raw": "192.168.234.130:8181/v1/data/:data?pretty=true",
+                    "host": [
+                        "192",
+                        "168",
+                        "234",
+                        "130"
+                    ],
+                    "port": "8181",
+                    "path": [
+                        "v1",
+                        "data",
+                        ":data"
+                    ],
+                    "query": [
+                        {
+                            "key": "pretty",
+                            "value": "true"
+                        }
+                    ],
+                    "variable": [
+                        {
+                            "key": "data",
+                            "value": "api"
+                        }
+                    ]
+                }
+            },
+            "response": []
+        },
+        {
+            "name": "Enforce",
+            "request": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                    "mode": "raw",
+                    "raw": "{\n    \"input\": {\n        \"user\": \"bob\",\n        \"resourceRequest\": true,\n        \"verb\": \"UPDATE\",\n        \"apiGroup\": \"*\",\n        \"resource\": \"namespaces\",\n        \"resourceName\": \"test\"\n    }\n}",
+                    "options": {
+                        "raw": {
+                            "language": "json"
+                        }
+                    }
+                },
+                "url": {
+                    "raw": "192.168.234.130:8181/v1/data/:data/:fn",
+                    "host": [
+                        "192",
+                        "168",
+                        "234",
+                        "130"
+                    ],
+                    "port": "8181",
+                    "path": [
+                        "v1",
+                        "data",
+                        ":data",
+                        ":fn"
+                    ],
+                    "variable": [
+                        {
+                            "key": "data",
+                            "value": "api/rbac"
+                        },
+                        {
+                            "key": "fn",
+                            "value": "allow"
+                        }
+                    ]
+                }
+            },
+            "response": []
+        },
+        {
+            "name": "QueryWhoare",
+            "request": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                    "mode": "raw",
+                    "raw": "{\n    \"input\": {\n        \"role\": \"admin\"\n    }\n}",
+                    "options": {
+                        "raw": {
+                            "language": "json"
+                        }
+                    }
+                },
+                "url": {
+                    "raw": "192.168.234.130:8181/v1/data/:data/:fn",
+                    "host": [
+                        "192",
+                        "168",
+                        "234",
+                        "130"
+                    ],
+                    "port": "8181",
+                    "path": [
+                        "v1",
+                        "data",
+                        ":data",
+                        ":fn"
+                    ],
+                    "variable": [
+                        {
+                            "key": "data",
+                            "value": "api/rbac"
+                        },
+                        {
+                            "key": "fn",
+                            "value": "who_are"
+                        }
+                    ]
+                }
+            },
+            "response": []
+        }
+    ]
+}

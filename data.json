@@ -1,0 +1,42 @@
+{
+    "roles": {
+        "alice": [
+            "admin"
+        ],
+        "bob": [
+            "regular"
+        ]
+    },
+    "permissions": {
+        "regular": [
+            {
+                "verbs": [
+                    "GET",
+                    "UPDATE"
+                ],
+                "apiGroups": [
+                    "*"
+                ],
+                "resources": [
+                    "namespaces",
+                    "clusters"
+                ],
+                "resourceNames": [],
+                "nonResourceURLs": [
+                    "/metrics"
+                ]
+            },
+            {
+                "verbs": "POST",
+                "apiGroups": [
+                    "core.io"
+                ],
+                "resources": [
+                    "*"
+                ],
+                "resourceNames": [],
+                "nonResourceURLs": []
+            }
+        ]
+    }
+}
