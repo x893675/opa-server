@@ -36,7 +36,6 @@ allow {
 # non resource request match
 allow {
 	input.resourceRequest == false
-
 }
 
 # user_is_admin is true if...

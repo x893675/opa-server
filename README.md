@@ -17,5 +17,6 @@
 
 ## Roadmap
 
+- [ ] 更新 README.md
 - [ ] 使用 [push-data 方式](https://www.openpolicyagent.org/docs/latest/external-data/#option-4-push-data) 实现 opa server 的 policy 和 data 的更新
 

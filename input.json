@@ -1,3 +1,8 @@
 {
-    "role": "admin"
+    "user": "bob",
+    "resourceRequest": true,
+    "verb": "CREATE",
+    "apiGroup": "",
+    "resource": "namespaces",
+    "resourceName": "test"
 }
