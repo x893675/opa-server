@@ -39,6 +39,12 @@ type ListOptions struct {
 	// - if it's 0, then we simply return what we currently have in cache, no guarantee;
 	// - if set to non zero, then the result is at least as fresh as given rv.
 	ResourceVersion string
+	// resourceVersionMatch determines how resourceVersion is applied to list calls.
+	// It is highly recommended that resourceVersionMatch be set for list calls where
+	// resourceVersion is set.
+	// See https://kubernetes.io/docs/reference/using-api/api-concepts/#resource-versions for
+	// details.
+	ResourceVersionMatch ResourceVersionMatch
 	// Timeout for the list/watch call.
 	TimeoutSeconds *int64
 	// Limit specifies the maximum number of results to return from the server. The server may

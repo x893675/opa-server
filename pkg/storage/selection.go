@@ -2,6 +2,7 @@ package storage
 
 import (
 	"github.com/x893675/opa-server/pkg/runtime"
+	"github.com/x893675/opa-server/pkg/storage/meta"
 	"k8s.io/apimachinery/pkg/fields"
 	"k8s.io/apimachinery/pkg/labels"
 )
@@ -97,4 +98,16 @@ func LabelIndex(label string) string {
 // FiledIndex add prefix for field index.
 func FieldIndex(field string) string {
 	return "f:" + field
+}
+
+func DefaultClusterScopedAttr(obj runtime.Object) (labels.Set, fields.Set, error) {
+	metadata, err := meta.Accessor(obj)
+	if err != nil {
+		return nil, nil, err
+	}
+	fieldSet := fields.Set{
+		"metadata.name": metadata.GetName(),
+	}
+
+	return labels.Set(metadata.GetLabels()), fieldSet, nil
 }

@@ -4,14 +4,13 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/x893675/opa-server/pkg/runtime"
 	"github.com/x893675/opa-server/pkg/runtime/serializer/json"
 	"github.com/x893675/opa-server/pkg/storage"
 	"github.com/x893675/opa-server/pkg/storage/etcd3"
+	"github.com/x893675/opa-server/pkg/storage/meta"
 	"github.com/x893675/opa-server/pkg/storage/storagebackend"
 	"github.com/x893675/opa-server/pkg/storage/storagebackend/factory"
-
-	"github.com/x893675/opa-server/pkg/runtime"
-	"github.com/x893675/opa-server/pkg/storage/meta"
 )
 
 type User struct {

@@ -10,7 +10,7 @@ import (
 // to return a no-op ObjectKindAccessor in cases where it is not expected to be serialized.
 type Object interface {
 	//GetObjectKind() schema.ObjectKind
-	//DeepCopyObject() Object
+	DeepCopyObject() Object
 	SetZeroValue() error
 }
 
